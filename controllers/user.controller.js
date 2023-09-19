@@ -1,45 +1,65 @@
+const { OAuth2Client } = require("google-auth-library");
 const postmodel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const secretKey = "secretKey";
 
 const regUser = async (req, res) => {
-  const { firstname, lastname, email } = req.body;
-  const post = { firstname, lastname, email };
+  const { email, password,firstname, lastname,  } = req.body;
+  const post = { email,password, firstname, lastname,};
 
-  const [userInsert] = await postmodel.registerUser(post);
-  if (userInsert.affectedRows > 0) {
+  const [duplicateMail] =await postmodel.duplicateMail({email});
+  console.log(duplicateMail,"====>");
+  if(duplicateMail.length > 0){
+    res.send({
+      status: 404,
+      statuscode: false,
+      message: "User already exists",
+    });
+  }else{
+    const [userInsert] = await postmodel.registerUser(post);
+    if (userInsert?.affectedRows > 0) {
     res.send({
       status: 200,
       statuscode: true,
       message: "User Inserted Successfully",
     });
   }
+  }
+  
 };
 
-const userGet = async (req, res) => {
-  const { userId, startTime, endTime, status, date, reason, roles } = req.body;
-  const loggedDetails = {
-    userId,
-    startTime,
-    endTime,
-    status,
-    date,
-    reason,
-    roles,
-  };
-  const [user] = await postmodel.permissionPost(loggedDetails);
-  if (user.affectedRows > 0) {
-    res.send({
-      status: 200,
-      statuscode: true,
-      message: "Successfully posted",
-    });
-  }
-};
+// const userGet = async (req, res) => {
+//   const { userId, startTime, endTime, status, date, reason, roles } = req.body;
+//   const loggedDetails = {
+//     userId,
+//     startTime,
+//     endTime,
+//     status,
+//     date,
+//     reason,
+//     roles,
+//   };
+//   const [user] = await postmodel.permissionPost(loggedDetails);
+//   if (user.affectedRows > 0) {
+//     res.send({
+//       status: 200,
+//       statuscode: true,
+//       message: "Successfully posted",
+//     });
+//   }
+// };
 
 const getUsers = async (req, res) => {
   let [gett] = await postmodel.userDetails();
+  if (gett.length > 0) {
+    res.status(200).json(gett);
+  }
+};
+
+const getUniqueUser = async (req, res) => {
+  const {email} =req.params ;
+  let [gett] = await postmodel.uniqueUserDetail({email});
   if (gett.length > 0) {
     res.status(200).json(gett);
   }
@@ -70,6 +90,12 @@ const login = async (req, res) => {
       message: "login successfull",
       token: jwtToken,
     });
+  }else{
+    res.send({
+      status: false,
+      statuscodes: 404,
+      message: "Invalid credentials",
+    });
   }
 };
 
@@ -79,20 +105,18 @@ const authentication = (req, res) => {
   // console.log("JWT verified successfully===>:", decoded);
 };
 
+
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
   const [userCheck] = await postmodel.forgotPassword({ email });
-  //  console.log(userCheck,"userCheck======>");
-
+   console.log(userCheck,"userCheck======>");
   if (userCheck.length != 1) {
-    console.log("info not there");
     res.send({
       status: 400,
       statuscode: false,
       message: "you are not registered",
     });
-  } else {
-  }
+  } 
 
   var smtpConfig = {
     host: "smtp.gmail.com",
@@ -133,12 +157,40 @@ const forgotPassword = async (req, res) => {
   }
 };
 
+const updateNewPassword = async(req, res) =>{
+  const {email,password} = req.body;
+  const [credentials] = await postmodel.updateNewPassword({email, password});
+    console.log("===>",credentials)
+  if (credentials.affectedRows > 0) {
+    res.send({
+      status: true,
+      statuscodes: 200,
+      message: "login successfull",
+    });
+  }
+}
+
+const postFormData = async(req, res) =>{
+  const {startTime,endTime,date,reason,user_Id} = req.body;
+  const [postData] = await postmodel.formData({startTime,endTime,date,reason,user_Id});
+  console.log("postData===>",postData)
+  if (postData?.affectedRows > 0) {
+    res.send({
+      status: true,
+      statuscodes: 200,
+      message: "login successfull",
+    });
+  }
+}
+
 module.exports = {
   regUser,
-  userGet,
   getUsers,
   deleteUsers,
   login,
   authentication,
   forgotPassword,
+  updateNewPassword,
+  getUniqueUser,
+  postFormData
 };
