@@ -8,8 +8,7 @@ app.post('/login', userController.login);
 app.post('/forgotPassword',userController.authentication, userController.forgotPassword);
 app.post('/updatePassword',userController.authentication, userController.updateNewPassword);
 app.post('/formData',userController.authentication, userController.postFormData);
-
-
+app.post('/googleSignIn',userController.googleSignIn);
 //All get apis
 app.get('/getAll',userController.authentication, userController.getUsers);
 app.get('/uniqueUser/:email',userController.authentication,userController.getUniqueUser);

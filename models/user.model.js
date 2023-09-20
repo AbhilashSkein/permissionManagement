@@ -8,6 +8,12 @@ const registerUser = async (post) => {
   return result;
 };
 
+const googleSign = async(user) =>{
+  let query = `select * from users where email = '${user.email}'`;
+  const result = await db.promise().query(query);
+  return result;
+}
+
 const duplicateMail = async(user) =>{
   let query = `select * from users where email = '${user.email}'`;
   const result = await db.promise().query(query);
@@ -87,5 +93,6 @@ module.exports = {
   insertNewCredentials,
   updateNewPassword,
   uniqueUserDetail,
-  formData
+  formData,
+  googleSign
 };
