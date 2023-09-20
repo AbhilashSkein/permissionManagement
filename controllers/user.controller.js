@@ -31,21 +31,24 @@ const regUser = async (req, res) => {
 
 const googleSignIn = async(req,res) =>{
   const {email} = req.body;
+
   let [signIn] = await postmodel.googleSign({email});
+  console.log(signIn,"signin====>");
   jwtToken = jwt.sign({ email }, secretKey, { expiresIn: "1000s" });
   if(signIn.length > 0){
     res.send({
-      status: false,
-      statuscodes: 404,
-      message: "user exists",
+      status: true,
+      statuscodes: 200,
+      token:jwtToken
     });
   }else{
     res.send({
-      status: true,
-      token:jwtToken
+      status: false,
+      message:"user not exists"
     });
   }
 }
+
 
 const getUsers = async (req, res) => {
   let [gett] = await postmodel.userDetails();
