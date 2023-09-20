@@ -1,23 +1,21 @@
 const express = require('express');
 const app = express();
 const userController = require('../controllers/user.controller');
-const { verifyToken } = require('../models/authToken');
-
 
 // all get post apis
 app.post('/registerUser', userController.regUser);
 app.post('/login', userController.login);
-app.post('/forgotPassword', userController.forgotPassword);
-app.post('/updatePassword', userController.updateNewPassword);
-app.post('/formData', userController.postFormData);
+app.post('/forgotPassword',userController.authentication, userController.forgotPassword);
+app.post('/updatePassword',userController.authentication, userController.updateNewPassword);
+app.post('/formData',userController.authentication, userController.postFormData);
 
 
 //All get apis
-app.get('/getAll', userController.getUsers);
+app.get('/getAll',userController.authentication, userController.getUsers);
 app.get('/uniqueUser/:email',userController.getUniqueUser);
 
 // All delete api
-app.delete('/deleteUser/:userId', userController.deleteUsers);
+app.delete('/deleteUser/:userId',userController.authentication, userController.deleteUsers);
 
 
 

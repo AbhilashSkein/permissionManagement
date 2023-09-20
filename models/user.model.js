@@ -29,7 +29,7 @@ const userDetails = async () => {
   return result;
 };
 const uniqueUserDetail = async (user) => {
-  const query = `select users.user_id,users.email,userdetails.startDate,userdetails.endDate,userDetails.status
+  const query = `select users.user_id,users.email,userdetails.startDate,userdetails.endDate,userdetails.status
                 from users
                 JOIN userdetails ON users.user_Id =  userdetails.user_Id
                 where users.email = '${user.email}'`; 

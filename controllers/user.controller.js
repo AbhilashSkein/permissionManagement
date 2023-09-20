@@ -66,13 +66,19 @@ const getUniqueUser = async (req, res) => {
 };
 
 const deleteUsers = async (req, res) => {
-  const userId = req.params;
-  let [delUser] = await postmodel.deleteUser(userId);
+  const userid = req.params;
+  let [delUser] = await postmodel.deleteUser(userid);
   if (delUser.affectedRows > 0) {
     res.send({
       status: true,
       statuscodes: 200,
       message: "user deleted successfully",
+    });
+  }else{
+    res.send({
+      status: false,
+      statuscodes: 404,
+      message: "user not found",
     });
   }
 };
@@ -82,7 +88,7 @@ let jwtToken;
 const login = async (req, res) => {
   const { email, password } = req.body;
   const [userCheck] = await postmodel.checkUser({ email, password });
-  jwtToken = jwt.sign({ userCheck }, secretKey, { expiresIn: "100s" });
+  jwtToken = jwt.sign({ userCheck }, secretKey, { expiresIn: "1000s" });
   if (userCheck.length > 0) {
     res.send({
       status: true,
@@ -99,14 +105,25 @@ const login = async (req, res) => {
   }
 };
 
-const authentication = (req, res) => {
-  const { tokenn } = req.query;
-  const decoded = jwt.verify(tokenn, secretKey);
-  // console.log("JWT verified successfully===>:", decoded);
+const authentication = (req, res,next) => {
+  const tokenn = req.headers['jwt'];
+  const decoded = jwt.verify(tokenn, secretKey, { expiresIn: "1000s" });
+  console.log("JWT verified successfully===>:", decoded);
+  if(decoded){
+    req.user = decoded;
+    next();
+  }else{
+    res.send({
+      status: false,
+      statuscodes: 404,
+      message: "Invalid credentials",
+    });
+  }
+  
 };
 
 
-const forgotPassword = async (req, res) => {
+const forgotPassword = async (req, res, next) => {
   const { email } = req.body;
   const [userCheck] = await postmodel.forgotPassword({ email });
    console.log(userCheck,"userCheck======>");
@@ -158,6 +175,8 @@ const forgotPassword = async (req, res) => {
 };
 
 const updateNewPassword = async(req, res) =>{
+  let user = req.user;
+  console.log("user",user.email)
   const {email,password} = req.body;
   const [credentials] = await postmodel.updateNewPassword({email, password});
     console.log("===>",credentials)
@@ -165,7 +184,7 @@ const updateNewPassword = async(req, res) =>{
     res.send({
       status: true,
       statuscodes: 200,
-      message: "login successfull",
+      message: "password updated successfull",
     });
   }
 }
