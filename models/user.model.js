@@ -39,8 +39,8 @@ const uniqueUserDetail = async (user) => {
 
 
 //delete api to delete user
-const deleteUser = async (userid) => {
-  const query = `delete from user where userId = '${userid.userId}'`;
+const deleteUser = async (user) => {
+  const query = `delete from users where user_Id = '${user .userId}'`;
   const result = db.promise().query(query);
   return result;
 };

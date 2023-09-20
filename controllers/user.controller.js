@@ -66,8 +66,8 @@ const getUniqueUser = async (req, res) => {
 };
 
 const deleteUsers = async (req, res) => {
-  const userid = req.params;
-  let [delUser] = await postmodel.deleteUser(userid);
+  const userId = req.params;
+  let [delUser] = await postmodel.deleteUser(userId);
   if (delUser.affectedRows > 0) {
     res.send({
       status: true,
@@ -178,7 +178,7 @@ const postFormData = async(req, res) =>{
     res.send({
       status: true,
       statuscodes: 200,
-      message: "login successfull",
+      message: "form submitted successfully",
     });
   }
 }
