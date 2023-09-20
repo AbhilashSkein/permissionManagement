@@ -1,4 +1,3 @@
-const { OAuth2Client } = require("google-auth-library");
 const postmodel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
@@ -28,28 +27,6 @@ const regUser = async (req, res) => {
   }
   
 };
-
-// const userGet = async (req, res) => {
-//   const { userId, startTime, endTime, status, date, reason, roles } = req.body;
-//   const loggedDetails = {
-//     userId,
-//     startTime,
-//     endTime,
-//     status,
-//     date,
-//     reason,
-//     roles,
-//   };
-//   const [user] = await postmodel.permissionPost(loggedDetails);
-//   if (user.affectedRows > 0) {
-//     res.send({
-//       status: 200,
-//       statuscode: true,
-//       message: "Successfully posted",
-//     });
-//   }
-// };
-
 const getUsers = async (req, res) => {
   let [gett] = await postmodel.userDetails();
   if (gett.length > 0) {

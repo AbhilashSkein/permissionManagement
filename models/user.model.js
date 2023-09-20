@@ -14,14 +14,6 @@ const duplicateMail = async(user) =>{
   return result;
 }
 
-//post api to create userid,starttime , endtime , date , reason and roles
-const permissionPost = async (post) => {
-  let query = `INSERT INTO userDetails(startTime,endTime,status,date,reason,roles) VALUES
-  ('${post.startTime}','${post.endTime}','${post.status}','${post.date}','${post.reason}','${post.roles}')`;
-  const result = await db.promise().query(query);
-  return result;
-};
-
 //get api to fetch all details of user
 const userDetails = async () => {
   const query = "SELECT * FROM userdetails";
@@ -40,7 +32,7 @@ const uniqueUserDetail = async (user) => {
 
 //delete api to delete user
 const deleteUser = async (user) => {
-  const query = `delete from users where user_Id = '${user .userId}'`;
+  const query = `delete from users where user_Id = '${user.userId}'`;
   const result = db.promise().query(query);
   return result;
 };
@@ -79,7 +71,7 @@ const updateNewPassword = (user) => {
 };
 
 const formData = async(user)=>{
-  let query = `INSERT INTO userDetails(startTime,endTime,date,reason,user_Id) 
+  let query = `INSERT INTO userdetails(startTime,endTime,date,reason,user_Id) 
   VALUES('${user.startTime}', '${user.endTime}', '${user.date}','${user.reason}','${user.user_Id}')`;
   const result = await db.promise().query(query);
   return result;
@@ -88,7 +80,6 @@ const formData = async(user)=>{
 module.exports = {
   registerUser,
   duplicateMail,
-  permissionPost,
   userDetails,
   deleteUser,
   checkUser,
