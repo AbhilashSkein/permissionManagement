@@ -9,6 +9,11 @@ export type AmplifyDependentResourcesAttributes = {
       "ApiId": "string",
       "ApiName": "string",
       "RootUrl": "string"
+    },
+    "apif0b22cae": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
     }
   },
   "auth": {
@@ -23,6 +28,13 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
+    "demo0e98f682": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "demo37087e20": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
