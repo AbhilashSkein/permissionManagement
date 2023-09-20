@@ -24,7 +24,7 @@ const permissionPost = async (post) => {
 
 //get api to fetch all details of user
 const userDetails = async () => {
-  const query = "SELECT * FROM userDetails";
+  const query = "SELECT * FROM userdetails";
   const result = await db.promise().query(query);
   return result;
 };
