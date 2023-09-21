@@ -22,7 +22,7 @@ const duplicateMail = async(user) =>{
 
 //get api to fetch all details of user
 const userDetails = async () => {
-  const query = "SELECT * FROM userdetails";
+  const query = "SELECT * FROM users";
   const result = await db.promise().query(query);
   return result;
 };
