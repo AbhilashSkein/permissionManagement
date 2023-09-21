@@ -13,6 +13,7 @@ app.post('/formData',userController.authentication, userController.postFormData)
 //All get apis
 app.get('/getAll', userController.getUsers);
 app.get('/uniqueUser/:email',userController.authentication,userController.getUniqueUser);
+app.get('/roleId', userController.getRoleID);
 
 // All delete api
 app.delete('/deleteUser/:userId',userController.authentication, userController.deleteUsers);

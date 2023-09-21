@@ -84,6 +84,12 @@ const getUniqueUser = async (req, res) => {
   }
 };
 
+const getRoleID = async(req, res) =>{
+  let [get] = await postmodel.roleID();
+  if(get.length > 0){
+    res.status(200).json(get);
+  }
+}
 const deleteUsers = async (req, res) => {
   const userid = req.params;
   let [delUser] = await postmodel.deleteUser(userid);
@@ -212,5 +218,6 @@ module.exports = {
   updateNewPassword,
   getUniqueUser,
   postFormData,
-  googleSignIn
+  googleSignIn,
+  getRoleID
 };

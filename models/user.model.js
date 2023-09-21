@@ -8,18 +8,17 @@ const registerUser = async (post) => {
   return result;
 };
 
-
-const googleSign = async(user) =>{
+const googleSign = async (user) => {
   let query = `select * from users where email = '${user.email}'`;
   const result = await db.promise().query(query);
   return result;
-}
+};
 
-const duplicateMail = async(user) =>{
+const duplicateMail = async (user) => {
   let query = `select * from users where email = '${user.email}'`;
   const result = await db.promise().query(query);
   return result;
-}
+};
 
 //get api to fetch all details of user
 const userDetails = async () => {
@@ -33,11 +32,16 @@ const uniqueUserDetail = async (user) => {
                 userdetails.startTime,userdetails.endTime,userdetails.date,userdetails.reason
                 from users
                 JOIN userdetails ON users.user_Id =  userdetails.user_Id
-                where users.email = '${user.email}'`; 
+                where users.email = '${user.email}'`;
   const result = await db.promise().query(query);
   return result;
 };
 
+const roleID = async() =>{
+  const query = "select * from role";
+  const result = await db.promise().query(query);
+  return result;
+}
 
 //delete api to delete user
 const deleteUser = async (user) => {
@@ -58,7 +62,7 @@ const checkUser = (user) => {
 //forgotpassword
 
 const forgotPassword = (user) => {
-  console.log(user,"user123====>");
+  console.log(user, "user123====>");
   const query = `select * from users where email ='${user.email}';`;
   const result = db.promise().query(query);
   return result;
@@ -74,17 +78,17 @@ const insertNewCredentials = (user) => {
 const updateNewPassword = (user) => {
   // console.log("newpassword",user)
   const insertQuery = `UPDATE users SET password='${user.password}' WHERE email = '${user.email}'`;
-  console.log("====>",insertQuery);
+  console.log("====>", insertQuery);
   const result = db.promise().query(insertQuery);
   return result;
 };
 
-const formData = async(user)=>{
+const formData = async (user) => {
   let query = `INSERT INTO userdetails(startTime,endTime,date,reason,user_Id) 
   VALUES('${user.startTime}', '${user.endTime}', '${user.date}','${user.reason}','${user.user_Id}')`;
   const result = await db.promise().query(query);
   return result;
-}
+};
 
 module.exports = {
   registerUser,
@@ -97,5 +101,6 @@ module.exports = {
   updateNewPassword,
   uniqueUserDetail,
   formData,
-  googleSign
+  googleSign,
+  roleID
 };
