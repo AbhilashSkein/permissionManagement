@@ -4,8 +4,8 @@ const nodemailer = require("nodemailer");
 const secretKey = "secretKey";
 
 const regUser = async (req, res) => {
-  const { email, password,firstname, lastname,  } = req.body;
-  const post = { email,password, firstname, lastname,};
+  const { email, password,firstname, lastname,phone  } = req.body;
+  const post = { email,password, firstname, lastname,phone};
 
   const [duplicateMail] =await postmodel.duplicateMail({email});
   console.log(duplicateMail,"====>");
@@ -30,8 +30,7 @@ const regUser = async (req, res) => {
 
 
 const googleSignIn = async(req,res) =>{
-  const {email} = req.body;
-
+  const {email} = req.body; 
   let [signIn] = await postmodel.googleSign({email});
   console.log(signIn,"signin====>");
   jwtToken = jwt.sign({ email }, secretKey, { expiresIn: "1000s" });
@@ -48,6 +47,26 @@ const googleSignIn = async(req,res) =>{
     });
   }
 }
+let jwtToken;
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  const [userCheck] = await postmodel.checkUser({ email, password });
+  jwtToken = jwt.sign({ userCheck }, secretKey, { expiresIn: "1000s" });
+  if (userCheck.length > 0) {
+    res.send({
+      status: true,
+      statuscodes: 200,
+      message: "login successfull",
+      token: jwtToken,
+    });
+  }else{
+    res.send({
+      status: false,
+      statuscodes: 404,
+      message: "Invalid credentials",
+    });
+  }
+};
 
 
 const getUsers = async (req, res) => {
@@ -84,26 +103,7 @@ const deleteUsers = async (req, res) => {
 };
 
 //login api
-let jwtToken;
-const login = async (req, res) => {
-  const { email, password } = req.body;
-  const [userCheck] = await postmodel.checkUser({ email, password });
-  jwtToken = jwt.sign({ userCheck }, secretKey, { expiresIn: "1000s" });
-  if (userCheck.length > 0) {
-    res.send({
-      status: true,
-      statuscodes: 200,
-      message: "login successfull",
-      token: jwtToken,
-    });
-  }else{
-    res.send({
-      status: false,
-      statuscodes: 404,
-      message: "Invalid credentials",
-    });
-  }
-};
+
 
 const authentication = (req, res,next) => {
   const tokenn = req.headers['jwt'];

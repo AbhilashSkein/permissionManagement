@@ -2,11 +2,12 @@ const db = require("../utils/database");
 
 //post api to create firstname , lastname and email
 const registerUser = async (post) => {
-  let query = `INSERT INTO users(email,password, firstname,lastname) VALUES 
-  ('${post.email}', '${post.password}', '${post.firstname}','${post.lastname}')`;
+  let query = `INSERT INTO users(email,password, firstname,lastname,phone) VALUES 
+  ('${post.email}', '${post.password}', '${post.firstname}','${post.lastname}',${post.phone})`;
   const result = await db.promise().query(query);
   return result;
 };
+
 
 const googleSign = async(user) =>{
   let query = `select * from users where email = '${user.email}'`;
